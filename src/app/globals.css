@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+/* Wire the next/font variable into Tailwind's font-sans utility. */
+@theme {
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
 *,
 *::before,
 *::after {
@@ -14,7 +19,6 @@
 body {
   background-color: #09090b; /* zinc-950 */
   color: #ffffff;
-  font-family: system-ui, sans-serif;
 }
 
 /* Player range sliders: hide the native track, style the thumb.
@@ -45,4 +49,16 @@ body {
 }
 .player-range:focus-visible::-webkit-slider-thumb {
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.5);
+}
+
+/* Subtle fade-in for page content. Respects reduced-motion. */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in { animation: none; }
 }
