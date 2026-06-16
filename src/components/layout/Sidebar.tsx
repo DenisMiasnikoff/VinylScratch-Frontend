@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { logout, getApiError } from '../../lib/api';
+import { useEffect } from 'react';
+import { logout, getApiError } from '@/lib/api';
 
 const nav = [
   { href: '/songs', label: 'Songs', icon: IconMusic },
@@ -10,15 +11,26 @@ const nav = [
   { href: '/favorites', label: 'Favorites', icon: IconHeart },
 ];
 
-export function Sidebar() {
+export function Sidebar({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
   const router = useRouter();
+
+  // Close the mobile drawer whenever the route changes.
+  useEffect(() => {
+    onClose();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   async function handleLogout() {
     try {
       await logout();
     } catch (err) {
-      // Even if the request fails, send the user to login.
       console.error(getApiError(err));
     } finally {
       router.push('/login');
@@ -26,40 +38,71 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex w-60 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950 p-4">
-      <Link href="/songs" className="mb-8 flex items-center gap-2 px-2 text-xl font-bold text-white">
-        <span className="text-violet-500">♫</span> VinylScratch
-      </Link>
+    <>
+      {/* Mobile overlay */}
+      <div
+        className={[
+          'fixed inset-0 z-40 bg-black/60 transition-opacity md:hidden',
+          open ? 'opacity-100' : 'pointer-events-none opacity-0',
+        ].join(' ')}
+        onClick={onClose}
+        aria-hidden
+      />
 
-      <nav className="flex flex-col gap-1">
-        {nav.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || pathname.startsWith(href + '/');
-          return (
-            <Link
-              key={href}
-              href={href}
-              className={[
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                active
-                  ? 'bg-zinc-800 text-white'
-                  : 'text-zinc-400 hover:bg-zinc-900 hover:text-white',
-              ].join(' ')}
-            >
-              <Icon active={active} />
-              {label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <button
-        onClick={handleLogout}
-        className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-white"
+      {/* Sidebar: static on desktop, slide-in drawer on mobile */}
+      <aside
+        className={[
+          'fixed z-50 flex h-full w-60 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950 p-4 transition-transform',
+          'md:static md:z-auto md:translate-x-0',
+          open ? 'translate-x-0' : '-translate-x-full',
+        ].join(' ')}
       >
-        <IconLogout />
-        Log out
-      </button>
-    </aside>
+        <div className="mb-8 flex items-center justify-between px-2">
+          <Link href="/songs" className="flex items-center gap-2 text-xl font-bold text-white">
+            <span className="text-violet-500">♫</span> VinylScratch
+          </Link>
+          {/* Close button, mobile only */}
+          <button
+            onClick={onClose}
+            aria-label="Close menu"
+            className="rounded-md p-1 text-zinc-400 hover:text-white md:hidden"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <nav className="flex flex-col gap-1">
+          {nav.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href || pathname.startsWith(href + '/');
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={[
+                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
+                  active
+                    ? 'bg-zinc-800 text-white'
+                    : 'text-zinc-400 hover:bg-zinc-900 hover:text-white',
+                ].join(' ')}
+              >
+                <Icon active={active} />
+                {label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <button
+          onClick={handleLogout}
+          className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-zinc-400 transition-colors hover:bg-zinc-900 hover:text-white"
+        >
+          <IconLogout />
+          Log out
+        </button>
+      </aside>
+    </>
   );
 }
 
