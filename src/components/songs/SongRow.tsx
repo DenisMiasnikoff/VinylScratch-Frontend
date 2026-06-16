@@ -10,6 +10,9 @@ type SongRowProps = {
   isFavorite: boolean;
   onToggleFavorite: (songId: string) => void;
   onDelete: (songId: string) => void;
+  // Customizes the trailing action. Defaults to deleting the song;
+  // playlists pass variant="remove" so it reads as "remove from playlist".
+  actionVariant?: 'delete' | 'remove';
 };
 
 export function SongRow({
@@ -18,11 +21,16 @@ export function SongRow({
   isFavorite,
   onToggleFavorite,
   onDelete,
+  actionVariant = 'delete',
 }: SongRowProps) {
   const { currentSong, isPlaying, playSong, togglePlay } = usePlayer();
 
   const isCurrent = currentSong?.id === song.id;
   const showPause = isCurrent && isPlaying;
+  const actionLabel =
+    actionVariant === 'remove'
+      ? `Remove ${song.title} from playlist`
+      : `Delete ${song.title}`;
 
   function handlePlay() {
     if (isCurrent) togglePlay();
@@ -86,13 +94,13 @@ export function SongRow({
         <IconHeart filled={isFavorite} />
       </button>
 
-      {/* Delete (appears on hover) */}
+      {/* Delete / remove (appears on hover) */}
       <button
         onClick={() => onDelete(song.id)}
-        aria-label={`Delete ${song.title}`}
+        aria-label={actionLabel}
         className="shrink-0 rounded-md p-1.5 text-zinc-500 opacity-0 transition hover:text-red-400 focus:opacity-100 group-hover:opacity-100"
       >
-        <IconTrash />
+        {actionVariant === 'remove' ? <IconMinus /> : <IconTrash />}
       </button>
     </div>
   );
@@ -141,6 +149,23 @@ function IconTrash() {
       aria-hidden
     >
       <path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2m2 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6" />
+    </svg>
+  );
+}
+function IconMinus() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M8 12h8" />
     </svg>
   );
 }
