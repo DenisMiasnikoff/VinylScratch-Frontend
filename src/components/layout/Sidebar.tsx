@@ -21,7 +21,7 @@ export function Sidebar({
   const pathname = usePathname();
   const router = useRouter();
 
-  // Close the mobile drawer whenever the route changes.
+  
   useEffect(() => {
     onClose();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,7 +39,7 @@ export function Sidebar({
 
   return (
     <>
-      {/* Mobile overlay */}
+     
       <div
         className={[
           'fixed inset-0 z-40 bg-black/60 transition-opacity md:hidden',
@@ -49,7 +49,7 @@ export function Sidebar({
         aria-hidden
       />
 
-      {/* Sidebar: static on desktop, slide-in drawer on mobile */}
+      
       <aside
         className={[
           'fixed z-50 flex h-full w-60 shrink-0 flex-col border-r border-zinc-800 bg-zinc-950 p-4 transition-transform',
@@ -61,7 +61,7 @@ export function Sidebar({
           <Link href="/songs" className="flex items-center gap-2 text-xl font-bold text-white">
             <span className="text-violet-500">♫</span> VinylScratch
           </Link>
-          {/* Close button, mobile only */}
+          
           <button
             onClick={onClose}
             aria-label="Close menu"

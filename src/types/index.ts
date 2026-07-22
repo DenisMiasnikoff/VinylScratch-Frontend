@@ -1,13 +1,13 @@
-// Mirrors the Prisma models + the { status, data } response envelope.
+
 
 export type Song = {
   id: string;
   title: string;
   artist: string | null;
-  duration: number | null; // seconds; often null, read real value from <audio>
+  duration: number | null; 
   fileUrl: string;
   userId: string;
-  createdAt: string; // ISO
+  createdAt: string; 
 };
 
 export type PlaylistSong = {
@@ -22,14 +22,14 @@ export type Playlist = {
   name: string;
   userId: string;
   createdAt: string;
-  songs: PlaylistSong[]; // GET /playlists includes nested songs
+  songs: PlaylistSong[]; 
 };
 
 export type Favorite = {
   userId: string;
   songId: string;
   createdAt: string;
-  song: Song; // GET /favorites includes the song
+  song: Song; 
 };
 
 export type User = {
@@ -39,6 +39,6 @@ export type User = {
   createdAt: string;
 };
 
-// Response envelope used by every endpoint.
+
 export type ApiSuccess<T> = { status: 'success'; data: T };
 export type ApiFail = { status: 'fail'; message: string };

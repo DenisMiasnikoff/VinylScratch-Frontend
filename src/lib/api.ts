@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import api from './axios';
 import type { Song, Playlist, Favorite, User } from '@/types';
 
-// Pulls a clean message out of the backend's { status:'fail', message } shape.
+
 export function getApiError(err: unknown): string {
   const axiosErr = err as AxiosError<{ message?: string }>;
   return (
@@ -12,7 +12,7 @@ export function getApiError(err: unknown): string {
   );
 }
 
-// ---- Auth ----
+
 export async function login(email: string, password: string): Promise<User> {
   const res = await api.post('/auth/login', { email, password });
   return res.data.data.user;
@@ -31,7 +31,7 @@ export async function logout(): Promise<void> {
   await api.post('/auth/logout');
 }
 
-// ---- Songs ----
+
 export async function getSongs(): Promise<Song[]> {
   const res = await api.get('/songs');
   return res.data.data.songs;
@@ -51,7 +51,7 @@ export async function deleteSong(id: string): Promise<void> {
   await api.delete(`/songs/${id}`);
 }
 
-// ---- Playlists ----
+
 export async function getPlaylists(): Promise<Playlist[]> {
   const res = await api.get('/playlists');
   return res.data.data.playlists;
@@ -80,7 +80,7 @@ export async function removeSongFromPlaylist(
   await api.delete(`/playlists/${playlistId}/songs/${songId}`);
 }
 
-// ---- Favorites ----
+
 export async function getFavorites(): Promise<Favorite[]> {
   const res = await api.get('/favorites');
   return res.data.data.favorites;

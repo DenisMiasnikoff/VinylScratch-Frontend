@@ -43,7 +43,7 @@ export default function PlaylistsPage() {
   }, []);
 
   function handleCreated(p: Playlist) {
-    // New playlists come back without the nested songs array; default it.
+    
     setPlaylists((prev) => [{ ...p, songs: p.songs ?? [] }, ...prev]);
   }
 

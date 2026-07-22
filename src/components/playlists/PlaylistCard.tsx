@@ -16,7 +16,7 @@ export function PlaylistCard({
   const count = songs.length;
 
   function handlePlayAll(e: React.MouseEvent) {
-    e.preventDefault(); // don't navigate; just play
+    e.preventDefault(); 
     if (songs.length) playSong(songs[0], songs);
   }
 
@@ -25,10 +25,10 @@ export function PlaylistCard({
       href={`/playlists/${playlist.id}`}
       className="group relative flex flex-col gap-3 rounded-xl border border-zinc-800 bg-zinc-900/60 p-4 transition-colors hover:bg-zinc-800/60"
     >
-      {/* Cover tile */}
+      
       <div className="relative flex aspect-square items-center justify-center rounded-lg bg-gradient-to-br from-violet-600/30 to-zinc-900 text-4xl text-violet-300">
         ♫
-        {/* Play-all button, appears on hover */}
+       
         {count > 0 && (
           <button
             onClick={handlePlayAll}
@@ -49,7 +49,7 @@ export function PlaylistCard({
         </p>
       </div>
 
-      {/* Delete, appears on hover */}
+     
       <button
         onClick={(e) => {
           e.preventDefault();

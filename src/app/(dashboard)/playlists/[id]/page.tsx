@@ -27,8 +27,7 @@ export default function PlaylistDetailPage() {
   const { playSong } = usePlayer();
   const { favoriteIds, toggleFavorite } = useFavorites();
 
-  // There's no GET /playlists/:id on the backend, so we fetch all playlists
-  // and pick this one. Fine at portfolio scale.
+  
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -71,14 +70,13 @@ export default function PlaylistDetailPage() {
     }
   }
 
-  // Called by the picker after a successful add; refreshes from server so the
-  // nested song object is correct.
+
   const refresh = useCallback(async () => {
     try {
       const all = await getPlaylists();
       setPlaylist(all.find((p) => p.id === playlistId) ?? null);
     } catch {
-      /* keep current */
+     
     }
   }, [playlistId]);
 
@@ -145,7 +143,7 @@ export default function PlaylistDetailPage() {
                   queue={songs}
                   isFavorite={favoriteIds.has(song.id)}
                   onToggleFavorite={toggleFavorite}
-                  onDelete={handleRemove} // here "delete" = remove from playlist
+                  onDelete={handleRemove} 
                   actionVariant="remove"
                 />
               ))}
@@ -166,7 +164,7 @@ export default function PlaylistDetailPage() {
   );
 }
 
-// Picker: lists library songs not already in the playlist; click to add.
+
 function AddSongsModal({
   playlistId,
   existingSongIds,
@@ -190,7 +188,7 @@ function AddSongsModal({
         const songs = await getSongs();
         if (!cancelled) setLibrary(songs);
       } catch {
-        /* show empty */
+       
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -207,7 +205,7 @@ function AddSongsModal({
       setAdded((prev) => new Set(prev).add(song.id));
       onChanged();
     } catch {
-      /* ignore; row stays addable */
+     
     } finally {
       setBusy(null);
     }

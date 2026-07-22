@@ -14,7 +14,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
         <Sidebar open={navOpen} onClose={() => setNavOpen(false)} />
 
         <div className="flex min-w-0 flex-1 flex-col">
-          {/* Mobile top bar */}
+          
           <header className="flex items-center gap-3 border-b border-zinc-800 px-4 py-3 md:hidden">
             <button
               onClick={() => setNavOpen(true)}

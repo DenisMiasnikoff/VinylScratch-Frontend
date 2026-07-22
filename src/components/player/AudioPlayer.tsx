@@ -17,13 +17,13 @@ export function AudioPlayer() {
     setVolume,
   } = usePlayer();
 
-  // Nothing selected yet — hide the bar entirely.
+  
   if (!currentSong) return null;
 
   return (
     <footer className="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-800 bg-zinc-900/95 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-3">
-        {/* Track info */}
+        
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-violet-600 to-violet-800 text-lg">
             ♫
@@ -38,7 +38,7 @@ export function AudioPlayer() {
           </div>
         </div>
 
-        {/* Controls + seek */}
+        
         <div className="flex flex-[2] flex-col items-center gap-1">
           <div className="flex items-center gap-4">
             <button
@@ -85,7 +85,7 @@ export function AudioPlayer() {
           </div>
         </div>
 
-        {/* Volume */}
+        
         <div className="hidden flex-1 items-center justify-end gap-2 sm:flex">
           <IconVolume muted={volume === 0} />
           <input
@@ -105,7 +105,7 @@ export function AudioPlayer() {
   );
 }
 
-// Fills the played portion of the range track in violet, rest in zinc.
+
 function rangeStyle(value: number, max: number): React.CSSProperties {
   const pct = max > 0 ? (value / max) * 100 : 0;
   return {
@@ -116,7 +116,7 @@ function rangeStyle(value: number, max: number): React.CSSProperties {
   };
 }
 
-// --- Inline icons (no dependency) ---
+
 function IconPlay() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>

@@ -13,7 +13,7 @@ export default function FavoritesPage() {
 
   const { favoriteIds, toggleFavorite } = useFavorites();
 
-  // Fetch on mount. setState only after await, so no cascading-render lint.
+
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -44,7 +44,7 @@ export default function FavoritesPage() {
     }
   }, []);
 
-  // When a song is unfavorited from this page, drop it from the list too.
+ 
   function handleToggleFavorite(songId: string) {
     toggleFavorite(songId);
     setSongs((prev) => prev.filter((s) => s.id !== songId));
