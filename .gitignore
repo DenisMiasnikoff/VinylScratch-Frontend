@@ -42,7 +42,7 @@ next-env.d.ts
 
 # Playwright
 node_modules/
-/tests/.auth
+/tests/.auth/
 /test-results/
 /playwright-report/
 /blob-report/
