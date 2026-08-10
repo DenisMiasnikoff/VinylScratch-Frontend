@@ -14,11 +14,15 @@ jobs:
       with:
         node-version: lts/*
     - name: Install dependencies
-      run: npm ci
+      run: npm install
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
+    - name: Create auth directory
+      run: mkdir -p tests/.auth
     - name: Run Playwright tests
       run: npx playwright test
+      env:
+        CI: true
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
