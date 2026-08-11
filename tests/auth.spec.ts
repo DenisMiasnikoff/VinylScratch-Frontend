@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-
 test.use({ storageState: undefined });
 
 test.describe('Authentication', () => {
@@ -18,13 +17,15 @@ test.describe('Authentication', () => {
     const emailInput = page.locator('input[type="email"]');
     await emailInput.waitFor({ state: 'visible' });
     await emailInput.fill('wrong@mail.com');
-    await page.locator('input[type="email"]').fill('testaccount1@mail.com');
-    await page.locator('input[type="password"]').fill('12345678');
+    await page.locator('input[type="password"]').fill('wrongpassword');
     await page.click('button[type="submit"]');
 
     await expect(page).toHaveURL(/\/login/);
+
     
-    await expect(page.getByText(/incorrect|invalid/i)).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.getByText('Incorrect email or password').first()
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('successful login redirects to songs', async ({ page }) => {
@@ -32,9 +33,10 @@ test.describe('Authentication', () => {
 
     const emailInput = page.getByPlaceholder('you@example.com');
     await emailInput.waitFor({ state: 'visible' });
-    await page.locator('input[type="email"]').fill('testaccount1@mail.com');
+    await emailInput.fill('testaccount1@mail.com');
     await page.locator('input[type="password"]').fill('12345678');
     await page.locator('button[type="submit"]').click();
+
     await expect(page).toHaveURL(/\/songs/, { timeout: 45000 });
     await expect(page.getByText('Your songs')).toBeVisible();
   });
@@ -51,13 +53,12 @@ test.describe('Authentication', () => {
 
     const emailInput = page.getByPlaceholder('you@example.com');
     await emailInput.waitFor({ state: 'visible' });
-    await page.locator('input[type="email"]').fill('testaccount1@gmail.com');
+    await emailInput.fill('testaccount1@mail.com');
     await page.locator('input[type="password"]').fill('12345678');
     await page.locator('input[type="password"]').press('Enter');
-    
+
     await expect(page).toHaveURL(/\/songs/, { timeout: 25000 });
 
-    
     await page.getByRole('button', { name: /log out/i }).click();
     await expect(page).toHaveURL(/\/login/, { timeout: 15000 });
   });

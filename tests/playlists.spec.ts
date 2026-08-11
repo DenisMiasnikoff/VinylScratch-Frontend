@@ -14,7 +14,9 @@ test.describe('Playlists', () => {
 
     await expect(page.getByText(/new playlist/i).first()).toBeVisible();
     await page.getByRole('button', { name: /cancel/i }).click();
-    await expect(page.getByText(/new playlist/i).first()).toBeVisible();
+
+    
+    await expect(page.locator('input[placeholder="My playlist"]')).not.toBeVisible();
   });
 
   test('create a playlist and it appears in the grid', async ({ page }) => {
@@ -30,7 +32,6 @@ test.describe('Playlists', () => {
   test('clicking a playlist navigates to its detail page', async ({ page }) => {
     await page.goto('/playlists');
 
-    
     const card = page.getByText('Playwright Test Playlist').first();
     await expect(card).toBeVisible({ timeout: 8000 });
     await card.click();
@@ -53,11 +54,11 @@ test.describe('Playlists', () => {
     const card = page.locator('a').filter({ hasText: 'Playwright Test Playlist' }).first();
     await expect(card).toBeVisible({ timeout: 8000 });
 
-    
+   
     await card.hover();
-    await page.getByRole('button', { name: /delete playwright test playlist/i }).first().click();
+    await card.locator('button[aria-label*="Delete"]').click();
 
-    await expect(page.getByText('Playwright Test Playlist').first()).not.toBeVisible({ timeout: 8000 });
+    await expect(page.getByText('Playwright Test Playlist').first()).not.toBeVisible({ timeout: 10000 });
   });
 
 });
