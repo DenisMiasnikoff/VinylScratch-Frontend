@@ -44,7 +44,21 @@ A few decisions worth calling out:
 
 ## Project structure
 
-src/├── app/               # login + register (auth) & dashboard routes├── components/        # layout, player, songs, playlists, ui├── context/           # global player state├── hooks/             # custom hooks (useFavorites)├── lib/               # axios instance, typed API, helpers└── types/             # shared TypeScript typestests/├── auth.spec.ts       # authentication flow tests├── favorites.spec.ts  # favorite add/remove tests├── navigation.spec.ts # sidebar & routing tests├── playlists.spec.ts  # playlist CRUD tests└── songs.spec.ts      # song playback & library management tests
+src/
+├── app/               # login + register (auth) & dashboard routes
+├── components/        # layout, player, songs, playlists, ui
+├── context/           # global player state
+├── hooks/             # custom hooks (useFavorites)
+├── lib/               # axios instance, typed API, helpers
+└── types/             # shared TypeScript types
+tests/
+├── auth.spec.ts       # authentication flow tests
+├── favorites.spec.ts  # favorite add/remove tests
+├── navigation.spec.ts # sidebar & routing tests
+├── playlists.spec.ts  # playlist CRUD tests
+└── songs.spec.ts      # song playback & library management tests
+
+
 ## Running locally
 
 You'll need the [backend](https://github.com/DenisMiasnikoff/VinylScratch-Backend) running first.
@@ -58,9 +72,24 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1" > .env.local
 
 # 3. Start the dev server
 npm run dev
-Open http://localhost:3000.Running E2E TestsBash# Run Playwright tests headlessly
+
+Open http://localhost:3000.
+
+# Run Playwright tests headlessly
 npx playwright test
 
 # Open Playwright UI mode for interactive test debugging
 npx playwright test --ui
-Environment variablesVariableDescriptionExampleNEXT_PUBLIC_API_URLBase URL of the backend APIhttp://localhost:5000/api/v1A note on audio filesVinylScratch stores a URL to each audio file rather than hosting the file itself. To test playback, add a song with any direct link to an audio file (e.g. an MP3 URL). Public sample tracks from SoundHelix work well and are built into the "Add song" form as quick-fill options.DeploymentDeployed on Netlify. The only required environment variable is NEXT_PUBLIC_API_URL, pointing at the deployed backend. Continuous integration automatically triggers Playwright E2E suites via GitHub Actions on push.Possible future improvementsFile upload (drag-and-drop) backed by cloud storage, replacing the URL fieldSearch and filtering across the libraryDrag-to-reorder playlist songsShared/public playlistsBuilt by Denis Miasnikov.
+
+A note on audio files
+
+VinylScratch stores a URL to each audio file rather than hosting the file itself. To test playback, add a song with any direct link to an audio file (e.g. an MP3 URL).
+
+ Public sample tracks from SoundHelix work well and are built into the "Add song" form as quick-fill options.
+
+
+Deployment
+
+Deployed on Netlify. The only required environment variable is NEXT_PUBLIC_API_URL, pointing at the deployed backend. Continuous integration automatically triggers Playwright E2E suites via GitHub Actions on push.
+
+Built by Denis Miasnikov.
