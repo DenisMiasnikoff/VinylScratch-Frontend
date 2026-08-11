@@ -2,13 +2,12 @@
 
 A clean, fast music library web app. Add songs, build playlists, keep your favorites, and listen through a persistent audio player that keeps playing as you move around the app.
 
-**Live demo:** https://vinylscratch-frontend.netlify.app
+**Live demo:** https://vinylscratch-frontend.netlify.app  
 **Backend repo:** https://github.com/DenisMiasnikoff/VinylScratch-Backend
 
 > ⏱️ The backend runs on a free tier and sleeps after inactivity — the first request may take ~50 seconds to wake it up. After that it's instant.
 
-![VinylScratch screenshot](./docs/screenshot.png)
-<!-- Add a screenshot at docs/screenshot.png — the songs page with a track playing looks best -->
+
 
 ---
 
@@ -20,6 +19,7 @@ A clean, fast music library web app. Add songs, build playlists, keep your favor
 - **Playlists** — create, delete, add/remove songs, and play an entire playlist.
 - **Favorites** — one-tap favoriting with optimistic updates that sync across every page.
 - **Authentication** — register and log in with secure httpOnly-cookie JWT sessions.
+- **Automated E2E Testing** — 31 Playwright end-to-end tests covering auth, navigation, song library, playlists, and favorites, running automatically on every push via GitHub Actions CI.
 - **Responsive** — works on desktop and mobile, with a slide-in navigation drawer on small screens.
 - **Polished states** — skeleton loaders, empty states, and error states with retry on every data view.
 
@@ -28,6 +28,8 @@ A clean, fast music library web app. Add songs, build playlists, keep your favor
 - **Next.js 15** (App Router)
 - **TypeScript**
 - **Tailwind CSS v4**
+- **Playwright** (End-to-End Testing)
+- **GitHub Actions** (CI Pipeline)
 - **Axios** for API calls
 
 ## Architecture highlights
@@ -38,26 +40,11 @@ A few decisions worth calling out:
 - **Derived over stored state.** The "current song" is derived from the queue position rather than duplicated into its own state, and playback metadata (duration, progress) is driven by the audio element's own events — eliminating a class of sync bugs.
 - **Typed API layer.** Every request goes through a single typed module that unwraps the backend's `{ status, data }` envelope and normalizes errors, so pages work with clean data and catchable failures.
 - **Optimistic UI.** Favoriting, deleting, and playlist edits update the interface immediately and roll back on failure, so the app feels instant.
+- **CI/CD Test Automation.** End-to-end flows are fully guarded by Playwright tests running headlessly in GitHub Actions workflows to catch regression bugs before production deployment.
 
 ## Project structure
 
-```
-src/
-├── app/
-│   ├── (auth)/            # login + register (centered card layout)
-│   └── (dashboard)/       # songs, playlists, favorites (sidebar + player layout)
-├── components/
-│   ├── layout/            # responsive sidebar + shell
-│   ├── player/            # persistent audio player bar
-│   ├── songs/             # song row, add-song modal
-│   ├── playlists/         # playlist card
-│   └── ui/                # reusable Input, Button
-├── context/               # global player state
-├── hooks/                 # useFavorites
-├── lib/                   # axios instance, typed API, helpers
-└── types/                 # shared TypeScript types
-```
-
+src/├── app/               # login + register (auth) & dashboard routes├── components/        # layout, player, songs, playlists, ui├── context/           # global player state├── hooks/             # custom hooks (useFavorites)├── lib/               # axios instance, typed API, helpers└── types/             # shared TypeScript typestests/├── auth.spec.ts       # authentication flow tests├── favorites.spec.ts  # favorite add/remove tests├── navigation.spec.ts # sidebar & routing tests├── playlists.spec.ts  # playlist CRUD tests└── songs.spec.ts      # song playback & library management tests
 ## Running locally
 
 You'll need the [backend](https://github.com/DenisMiasnikoff/VinylScratch-Backend) running first.
@@ -71,31 +58,9 @@ echo "NEXT_PUBLIC_API_URL=http://localhost:5000/api/v1" > .env.local
 
 # 3. Start the dev server
 npm run dev
-```
+Open http://localhost:3000.Running E2E TestsBash# Run Playwright tests headlessly
+npx playwright test
 
-Open [http://localhost:3000](http://localhost:3000).
-
-### Environment variables
-
-| Variable | Description | Example |
-|---|---|---|
-| `NEXT_PUBLIC_API_URL` | Base URL of the backend API | `http://localhost:5000/api/v1` |
-
-### A note on audio files
-
-VinylScratch stores a **URL** to each audio file rather than hosting the file itself. To test playback, add a song with any direct link to an audio file (e.g. an MP3 URL). Public sample tracks from [SoundHelix](https://www.soundhelix.com/audio-examples) work well and are built into the "Add song" form as quick-fill options.
-
-## Deployment
-
-Deployed on **Netlify**. The only required environment variable is `NEXT_PUBLIC_API_URL`, pointing at the deployed backend. Because it's a `NEXT_PUBLIC_` variable, it's baked in at build time — changing it requires a fresh deploy.
-
-## Possible future improvements
-
-- File upload (drag-and-drop) backed by cloud storage, replacing the URL field
-- Search and filtering across the library
-- Drag-to-reorder playlist songs
-- Shared/public playlists
-
----
-
-Built by [Denis Miasnikov](https://github.com/DenisMiasnikoff).
+# Open Playwright UI mode for interactive test debugging
+npx playwright test --ui
+Environment variablesVariableDescriptionExampleNEXT_PUBLIC_API_URLBase URL of the backend APIhttp://localhost:5000/api/v1A note on audio filesVinylScratch stores a URL to each audio file rather than hosting the file itself. To test playback, add a song with any direct link to an audio file (e.g. an MP3 URL). Public sample tracks from SoundHelix work well and are built into the "Add song" form as quick-fill options.DeploymentDeployed on Netlify. The only required environment variable is NEXT_PUBLIC_API_URL, pointing at the deployed backend. Continuous integration automatically triggers Playwright E2E suites via GitHub Actions on push.Possible future improvementsFile upload (drag-and-drop) backed by cloud storage, replacing the URL fieldSearch and filtering across the libraryDrag-to-reorder playlist songsShared/public playlistsBuilt by Denis Miasnikov.
